@@ -8,7 +8,7 @@ SECRET_KEY = 'django-insecure-_iyn$v%q8a+%8xpk5u#$p^7havxn1tdf$bgpyc3r^7g4f54agl
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 
@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # Third Party Apps
     "rest_framework",
     'drf_spectacular',
+    "corsheaders",
 
 ]
 
@@ -32,12 +33,18 @@ AUTH_USER_MODEL = 'users.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS_ALLOWED_ORIGINS =["*"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_METHODS = ["*"]
+CORS_ALLOW_HEADERS = ["*"]
 
 ROOT_URLCONF = 'core.urls'
 

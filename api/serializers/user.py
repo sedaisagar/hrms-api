@@ -30,8 +30,11 @@ class ClientProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ClientProfile
-        # fields = "__all__"
-        exclude = ["client_id"]
+        fields = "__all__"
+        # exclude = ["client_id"]
+        extra_kwargs = {
+            "client_id": {"read_only": True}
+        }
 
     def validate(self, attrs):
         user : User = attrs.get("user")
