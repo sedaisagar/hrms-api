@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 
-from api.serializers.projects import ProjectDocumentSerializer, ProjectSerializer, ProjectTagsSerializer
-from projects.models import Project, ProjectDocument, ProjectTags
+from api.serializers.projects import ProjectDocumentSerializer, ProjectSerializer, ProjectTagsSerializer, ProjectTaskResponseSerializer, ProjectTaskSerializer, ProjectTaskUpdateSerializer
+from projects.models import Project, ProjectDocument, ProjectTags, ProjectTask
 from rest_framework.permissions import IsAdminUser
 
 from drf_spectacular.utils import extend_schema
@@ -27,3 +27,21 @@ class ProjectDocumentViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['project', 'maker']
     permission_classes = [IsAdminUser]
+
+
+@extend_schema(tags=["Projects"], summary="CRUD operations for Project Documents")
+class ProjectTaskViewSet(viewsets.ModelViewSet):
+    queryset = ProjectTask.objects.all()
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['project']
+    permission_classes = [IsAdminUser]
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return ProjectTaskResponseSerializer
+        elif self.action in ['create']:
+            return ProjectTaskSerializer
+        elif self.action in ['update', 'partial_update']:
+            return ProjectTaskUpdateSerializer
+        # Fallback to default serializer
+        return ProjectTaskSerializer

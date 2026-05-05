@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from api.serializers.user import ClientProfileSerializer, EmployeeProfileSerializer, UserSerializer
-from projects.models import Project, ProjectDocument, ProjectTags
+from projects.models import Project, ProjectDocument, ProjectTags, ProjectTask
 
 class ProjectTagsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,3 +44,25 @@ class ProjectDocumentSerializer(serializers.ModelSerializer):
         return data
     
     
+class ProjectTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectTask
+        fields = "__all__"
+        extra_kwargs = {
+            'project': {'write_only': True},
+            'status':{'read_only': True},
+        }
+
+class ProjectTaskResponseSerializer(serializers.ModelSerializer):
+    members = EmployeeProfileSerializer(many=True, read_only=True)
+    tags = ProjectTagsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ProjectTask
+        fields = "__all__"
+
+
+class ProjectTaskUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectTask
+        exclude = ['project']        

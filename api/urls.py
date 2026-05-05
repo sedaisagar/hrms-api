@@ -1,7 +1,7 @@
 from django.urls import path
 
 from api.views.basic import CustomTokenObtainPairView, CustomTokenRefreshView, EmployeeRegistrationView, GetMyProfileView, UserRegistrationView
-from api.views.projects import ProjectDocumentViewSet, ProjectTagsViewSet, ProjectViewSet
+from api.views.projects import ProjectDocumentViewSet, ProjectTagsViewSet, ProjectTaskViewSet, ProjectViewSet
 
 
 urlpatterns = [
@@ -32,5 +32,6 @@ router.register('teams', TeamsViewSet, basename='teams')
 router.register('project-tags', ProjectTagsViewSet, basename='project-tags')
 router.register('projects', ProjectViewSet, basename='projects')
 router.register('project-documents', ProjectDocumentViewSet, basename='project-documents')
+router.register('project-tasks', ProjectTaskViewSet, basename='project-tasks')
 
 urlpatterns += router.urls
