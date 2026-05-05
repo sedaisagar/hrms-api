@@ -1,6 +1,6 @@
 from rest_framework import  serializers
 
-from users.models import User, ClientProfile
+from users.models import EmergencyContact, EmployeeProfile, User, ClientProfile
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -38,11 +38,36 @@ class ClientProfileSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         user : User = attrs.get("user")
-        if user.role != "user":
+        if user and user.role != "user":
             raise serializers.ValidationError({
                 "user":["User with role user are only allowed to create client profile!"]
             })
 
 
         return super().validate(attrs)
+
+class EmployeeProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeProfile
+        fields = "__all__"
+        extra_kwargs = {
+            "employee_id": {"read_only": True}
+        }
+
+    def validate(self, attrs):
+        user : User = attrs.get("user")
+        if user and user.role != "employee":
+            raise serializers.ValidationError({
+                "user":["User with role employee are only allowed to create employee profile!"]
+            })
+
+
+        return super().validate(attrs)
     
+class EmergencyContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmergencyContact
+        fields = "__all__"
+    
+    def create(self, validated_data):
+        return super().create(validated_data)

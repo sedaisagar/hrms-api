@@ -16,7 +16,11 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'phone_number',
             'date_of_birth',
             'photo',
+            'role',
         ]
+        extra_kwargs = {
+            'role': {'read_only': True},    
+        }
         
 
     def create(self, validated_data):

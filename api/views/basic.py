@@ -65,6 +65,27 @@ class GetMyProfileView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
-        user = request.user
+        user : User = request.user
         serializer = UserRegistrationSerializer(user)
-        return Response(serializer.data)
+        profile_serializer = None
+
+        if user.role == "user":
+            try:
+                profile = user.client_profile
+                from api.serializers.user import ClientProfileSerializer
+                profile_serializer = ClientProfileSerializer(profile)
+            except:
+                profile_serializer = None
+        elif user.role == "employee":
+            try:
+                profile = user.employee_profile
+                from api.serializers.user import EmployeeProfileSerializer
+                profile_serializer = EmployeeProfileSerializer(profile)
+            except:
+                profile_serializer = None
+
+        data = {
+            "user": serializer.data,
+            "profile": profile_serializer.data if profile_serializer else None,
+        }
+        return Response(data)
